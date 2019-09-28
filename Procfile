@@ -1,1 +1,1 @@
- web: gunicorn team7.wsgi 
+web: gunicorn --pythonpath team7 team7.wsgi
