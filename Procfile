@@ -1,0 +1,1 @@
+ web: gunicorn --env DJANGO_SETTINGS_MODULE=team7.team7.settings team7.team7.wsgi 
