@@ -19,6 +19,10 @@ from tracker import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('task/', views.TaskList.as_view()),
+    path('task/<int:pk>/', views.TaskDetail.as_view()),
     path('project/', views.ProjectList.as_view()),
-    path('project/<int:pk>/', views.ProjectDetail.as_view())
+    path('project/<int:pk>/', views.ProjectDetail.as_view()),
+    path('user/', views.UserList.as_view()),
+    path('user/<int:pk>/', views.UserDetail.as_view()),
 ]
