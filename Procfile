@@ -1,1 +1,1 @@
-web: gunicorn team7.wsgi
+web: gunicorn team7.team7.wsgi
