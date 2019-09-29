@@ -16,6 +16,11 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'description',
                   'man_hours', 'project', 'assignee', 'start', 'end']
 
+    def validate(self, attrs):
+        instance = Task(**attrs)
+        instance.clean()
+        return attrs
+
 
 class ProjectTaskSerializer(serializers.ModelSerializer):
     class Meta:

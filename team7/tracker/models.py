@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from datetime import date
+from django.core.exceptions import ValidationError
 
 
 class Project(models.Model):
@@ -23,8 +24,12 @@ class Task(models.Model):
         Project, related_name='tasks', on_delete=models.CASCADE, null=False)
     assignee = models.ForeignKey(
         'auth.User', related_name='assignee', on_delete=models.CASCADE, null=False)
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    start = models.DateField()
+    end = models.DateField()
+
+    def clean(self):
+        if self.end < self.start:
+            raise ValidationError("End date must be after start date.")
 
     def __str__(self):
         return '{0}'.format(self.name)
