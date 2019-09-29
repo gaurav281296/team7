@@ -6,6 +6,7 @@ class Project(models.Model):
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=64)
     man_hours = models.IntegerField(validators=[MinValueValidator(1)])
+    image = models.FileField(null=True)
     owner = models.ForeignKey(
         'auth.User', related_name='projects', on_delete=models.CASCADE, null=False)
 

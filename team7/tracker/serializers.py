@@ -6,7 +6,8 @@ from rest_framework import serializers
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ['id', 'name', 'description', 'man_hours', 'owner', 'tasks']
+        fields = ['id', 'name', 'description',
+                  'man_hours', 'image', 'owner', 'tasks']
 
 
 class TaskSerializer(serializers.ModelSerializer):
