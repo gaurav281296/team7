@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from datetime import date
 
 
 class Project(models.Model):
@@ -22,6 +23,8 @@ class Task(models.Model):
         Project, related_name='tasks', on_delete=models.CASCADE, null=False)
     assignee = models.ForeignKey(
         'auth.User', related_name='assignee', on_delete=models.CASCADE, null=False)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
 
     def __str__(self):
         return '{0}'.format(self.name)
