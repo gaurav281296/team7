@@ -39,9 +39,12 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
 
 @api_view(['GET'])
 def project_tasks(request, pk):
-    projects = Project.objects.all()
+    projects = Project.objects.filter(id=pk)
     serializer = ProjectTaskSerializer(projects, many=True)
-    task_keys = dict(serializer.data[0])['tasks']
+    try:
+        task_keys = dict(serializer.data[0])['tasks']
+    except Exception as e:
+        return Response("Invalid Project")
     tasks = Task.objects.filter(id__in=task_keys)
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
