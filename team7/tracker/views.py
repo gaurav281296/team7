@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from tracker.serializers import ProjectSerializer, UserSerializer, TaskSerializer, ProjectTaskSerializer
 from rest_framework import generics
 from rest_framework.decorators import api_view
+from rest_framework import status
 
 
 class ProjectList(generics.ListCreateAPIView):
@@ -38,7 +39,7 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 @api_view(['GET'])
-def project_tasks(request, pk):
+def project_task(request, pk):
     projects = Project.objects.filter(id=pk)
     serializer = ProjectTaskSerializer(projects, many=True)
     try:
@@ -48,3 +49,36 @@ def project_tasks(request, pk):
     tasks = Task.objects.filter(id__in=task_keys)
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def project_task_detail(request, pk, tk):
+    projects = Project.objects.filter(id=pk)
+    serializer = ProjectTaskSerializer(projects, many=True)
+    try:
+        task_keys = dict(serializer.data[0])['tasks']
+    except Exception as e:
+        return Response("Invalid Project")
+
+    if tk in task_keys:
+        try:
+            task = Task.objects.filter(id=tk)
+        except Snippet.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if request.method == 'GET':
+            serializer = TaskSerializer(task, many=True)
+            return Response(serializer.data)
+
+        elif request.method == 'PUT':
+            serializer = TaskSerializer(task, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        elif request.method == 'DELETE':
+            task.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response("Task does not belong to project")
