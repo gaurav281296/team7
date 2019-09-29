@@ -18,8 +18,11 @@ from django.urls import path, include
 from tracker import views
 from django.conf.urls.static import static
 from django.conf import settings
+from rest_framework_swagger.views import get_swagger_view
+schema_view = get_swagger_view(title='Tracker API')
 
 urlpatterns = [
+    path('', schema_view),
     path('admin/', admin.site.urls),
     path('task/', views.TaskList.as_view()),
     path('task/<int:pk>/', views.TaskDetail.as_view()),
